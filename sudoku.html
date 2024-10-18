@@ -100,35 +100,37 @@
         }
 
         function createSudokuBoard() {
-            sudokuBoard.innerHTML = ''; // Clear the existing board
-            const board = generateRandomBoard();
+    sudokuBoard.innerHTML = ''; // Clear the existing board
 
-            board.forEach((row, rowIndex) => {
-                row.forEach((value, colIndex) => {
-                    const cell = document.createElement('input');
-                    cell.type = 'text';
-                    cell.classList.add('cell');
-                    cell.setAttribute('data-row', rowIndex);
-                    cell.setAttribute('data-col', colIndex);
-                    cell.maxLength = 1;
+    // Predefined Sudoku puzzle (0 represents an empty cell)
+    const board = [[5,3,0,0,7,0,0,0,0],[6,0,0,1,9,5,0,0,0],[0,9,8,0,0,0,0,6,0],[8,0,0,0,6,0,0,0,3],[4,0,0,8,0,3,0,0,1],[7,0,0,0,2,0,0,0,6],[0,6,0,0,0,0,2,8,0],[0,0,0,4,1,9,0,0,5],[0,0,0,0,8,0,0,7,9]];
 
-                    // Add thick borders for 3x3 grids
-                    if (rowIndex % 3 === 0) cell.classList.add('thick-border-top');
-                    if (colIndex % 3 === 0) cell.classList.add('thick-border-left');
+    board.forEach((row, rowIndex) => {
+        row.forEach((value, colIndex) => {
+            const cell = document.createElement('input');
+            cell.type = 'text';
+            cell.classList.add('cell');
+            cell.setAttribute('data-row', rowIndex);
+            cell.setAttribute('data-col', colIndex);
+            cell.maxLength = 1;
 
-                    if (value !== 0) {
-                        cell.value = value;
-                        cell.readOnly = true;
-                        cell.classList.add('readonly');
-                    } else {
-                        cell.addEventListener('input', validateInput);
-                    }
+            // Add thick borders for 3x3 grids
+            if (rowIndex % 3 === 0) cell.classList.add('thick-border-top');
+            if (colIndex % 3 === 0) cell.classList.add('thick-border-left');
 
-                    cell.addEventListener('keydown', navigateWithArrows);
-                    sudokuBoard.appendChild(cell);
-                });
-            });
-        }
+            if (value !== 0) {
+                cell.value = value;
+                cell.readOnly = true;
+                cell.classList.add('readonly');
+            } else {
+                cell.addEventListener('input', validateInput);
+            }
+
+            cell.addEventListener('keydown', navigateWithArrows);
+            sudokuBoard.appendChild(cell);
+        });
+    });
+}
 
         function validateInput(event) {
             const cell = event.target;
@@ -230,7 +232,7 @@
 
         nextPageButton.addEventListener('click', () => {
             // Redirect to the next page or perform any other action
-            window.location.href = '8queens.html'; // Replace with the actual URL or action
+            window.location.href = 'hanoi.html'; // Replace with the actual URL or action
         });
 
         // Initialize the game
