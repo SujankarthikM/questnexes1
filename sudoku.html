@@ -79,6 +79,21 @@
     <button id="next-page">Next</button>
 
     <script>
+
+         document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+      // Disable common developer tools shortcuts
+      document.onkeydown = function (e) {
+        if (
+          e.key == "F12" ||
+          (e.ctrlKey && e.shiftKey && e.key == "I") || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.key == "J") || // Ctrl+Shift+J
+          (e.ctrlKey && e.key == "U") // Ctrl+U
+        ) {
+          return false;
+        }
+      };
         const sudokuBoard = document.getElementById('sudoku-board');
         const newGameButton = document.getElementById('new-game');
         const nextPageButton = document.getElementById('next-page');
