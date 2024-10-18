@@ -1,84 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>8 Queens Problem</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queen Placement</title>
     <style>
-      body {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-      }
-      #chessboard {
-        display: grid;
-        grid-template-columns: repeat(8, 60px);
-        grid-template-rows: repeat(8, 60px);
-        gap: 0;
-        border: 2px solid black;
-      }
-      .square {
-        width: 60px;
-        height: 60px;
-      }
-      .light {
-        background-color: #f0d9b5;
-      }
-      .dark {
-        background-color: #b58863;
-      }
-      .queen {
-        font-size: 45px;
-        cursor: grab;
-        text-align: center;
-        line-height: 60px;
-      }
-      #queen-container {
-        display: flex; /* Horizontal arrangement */
-        margin-top: 20px;
-      }
-      .outside {
-        margin: 5px;
-      }
-      #status {
-        margin-top: 20px;
-        font-size: 18px;
-      }
-      .valid {
-        border: 2px solid green;
-      }
-      .invalid {
-        border: 2px solid red;
-      }
-      #nextBtn {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-      }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        #chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 60px);
+            grid-template-rows: repeat(8, 60px);
+            gap: 1px;
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .cell.invalid {
+            background-color: rgb(231, 225, 59);
+        }
+        .queen img {
+            width: 100%;
+            height: 100%;
+        }
+        #finish-message {
+            margin-top: 20px;
+            font-size: 24px;
+            color: green;
+            display: none;
+        }
     </style>
-  </head>
-  <body>
-    <div id="chessboard">
-      <!-- 8x8 Chessboard Squares will be generated here -->
-    </div>
+</head>
+<body>
 
-    <div id="queen-container">
-      <!-- 8 Queens will be placed here initially -->
-    </div>
-
-    <div id="status"></div>
-    <button id="nextBtn" disabled>Next</button>
+    <div id="chess-board"></div>
+    <div id="finish-message">Congratulations! All queens placed correctly. Redirecting...</div>
 
     <script>
-
-      const chessboard = document.getElementById("chessboard");
-      const queenContainer = document.getElementById("queen-container");
-      const status = document.getElementById("status");
-      const nextBtn = document.getElementById("nextBtn");
-      
- document.addEventListener("contextmenu", function (e) {
+       document.addEventListener("contextmenu", function (e) {
         e.preventDefault();
       });
       // Disable common developer tools shortcuts
@@ -92,119 +69,79 @@
           return false;
         }
       };
-      // Function to generate an 8x8 chessboard
-      function createChessboard() {
-        for (let i = 0; i < 64; i++) {
-          const square = document.createElement("div");
-          square.classList.add("square");
-          square.classList.add(
-            (Math.floor(i / 8) + i) % 2 === 0 ? "light" : "dark"
-          );
-          square.setAttribute("data-position", i);
-          square.addEventListener("dragover", allowDrop);
-          square.addEventListener("drop", drop);
-          chessboard.appendChild(square);
-        }
-      }
+        const chessBoard = document.getElementById('chess-board');
+        const finishMessage = document.getElementById('finish-message');
+        const boardSize = 8;
+        let queens = [];
 
-      // Create 8 queens
-      function createQueens() {
-        for (let i = 0; i < 8; i++) {
-          const queen = document.createElement("div");
-          queen.classList.add("queen", "outside");
-          queen.setAttribute("draggable", "true");
-          queen.innerHTML = "&#9819;"; // Queen symbol in chess
-          queen.setAttribute("data-id", i);
-          queen.addEventListener("dragstart", drag);
-          queenContainer.appendChild(queen);
-        }
-      }
+        function createChessBoard() {
+            chessBoard.innerHTML = ''; // Clear previous board
+            queens = []; // Reset the queens array
 
-      // Drag and Drop functionality
-      function drag(ev) {
-        ev.dataTransfer.setData("queenId", ev.target.dataset.id);
-      }
-
-      function allowDrop(ev) {
-        ev.preventDefault();
-      }
-
-      function drop(ev) {
-        ev.preventDefault();
-        const queenId = ev.dataTransfer.getData("queenId");
-        const queen = document.querySelector(`.queen[data-id="${queenId}"]`);
-        ev.target.appendChild(queen);
-
-        checkBoardState();
-      }
-
-      // Check if the current board state is valid (N-Queens problem)
-      function checkBoardState() {
-        const queens = document.querySelectorAll(".queen");
-        const queenPositions = [];
-
-        queens.forEach((queen) => {
-          const parentSquare = queen.parentNode;
-          if (parentSquare.dataset.position) {
-            const position = parseInt(parentSquare.dataset.position);
-            queenPositions.push(position);
-          }
-        });
-
-        if (queenPositions.length < 8) {
-          status.textContent = "Place all 8 queens on the board.";
-          nextBtn.disabled = true;
-          return;
-        }
-
-        const isValid = validateQueens(queenPositions);
-
-        if (isValid) {
-          status.textContent = "All queens are in valid positions.";
-          queens.forEach((q) => q.classList.remove("invalid"));
-          queens.forEach((q) => q.classList.add("valid"));
-          nextBtn.disabled = false; // Enable the button when the solution is valid
-          nextBtn.style.display = "inline"; // Make button visible
-        } else {
-          status.textContent =
-            "Invalid positions! Some queens can attack each other.";
-          queens.forEach((q) => q.classList.remove("valid"));
-          queens.forEach((q) => q.classList.add("invalid"));
-          nextBtn.disabled = true;
-        }
-      }
-
-      // Algorithm to check N-Queens validity
-      function validateQueens(positions) {
-        for (let i = 0; i < positions.length; i++) {
-          for (let j = i + 1; j < positions.length; j++) {
-            const row1 = Math.floor(positions[i] / 8);
-            const col1 = positions[i] % 8;
-            const row2 = Math.floor(positions[j] / 8);
-            const col2 = positions[j] % 8;
-
-            // Check if queens are on the same row, column, or diagonal
-            if (
-              row1 === row2 ||
-              col1 === col2 ||
-              Math.abs(row1 - row2) === Math.abs(col1 - col2)
-            ) {
-              return false;
+            for (let row = 0; row < boardSize; row++) {
+                for (let col = 0; col < boardSize; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.setAttribute('data-row', row);
+                    cell.setAttribute('data-col', col);
+                    cell.addEventListener('click', placeQueen);
+                    chessBoard.appendChild(cell);
+                }
             }
-          }
         }
-        return true;
-      }
 
-      // Event for "Next" button
-      nextBtn.addEventListener("click", () => {
-        alert("Proceeding to the next page...");
-        window.location.href = "digi_logic.html"; // Redirect to next page
-      });
+        function placeQueen(event) {
+            const cell = event.target;
+            const row = parseInt(cell.getAttribute('data-row'));
+            const col = parseInt(cell.getAttribute('data-col'));
 
-      // Initial setup
-      createChessboard();
-      createQueens();
+            // Place the queen if the cell is not invalid
+            if (!cell.classList.contains('invalid') && !cell.classList.contains('queen')) {
+                cell.classList.add('queen');
+                
+                // Add queen image inside the cell
+                const queenImage = document.createElement('img');
+                queenImage.src = 'queen.png';  // Path to the queen image
+                cell.appendChild(queenImage);
+
+                queens.push({ row, col });
+                highlightInvalidPositions();
+                checkIfSolved();
+            }
+        }
+
+        function highlightInvalidPositions() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                const row = parseInt(cell.getAttribute('data-row'));
+                const col = parseInt(cell.getAttribute('data-col'));
+                cell.classList.remove('invalid');
+
+                // If the cell is already a queen, skip invalidating it
+                if (cell.classList.contains('queen')) return;
+
+                // Mark invalid positions (row, column, diagonals)
+                queens.forEach(queen => {
+                    if (queen.row === row || queen.col === col ||
+                        Math.abs(queen.row - row) === Math.abs(queen.col - col)) {
+                        cell.classList.add('invalid');
+                    }
+                });
+            });
+        }
+
+        function checkIfSolved() {
+            if (queens.length === boardSize) {
+                finishMessage.style.display = 'block';  // Show finish message
+                setTimeout(() => {
+                    window.location.href = 'digi_logic.html'; // Redirect after 3 seconds
+                }, 3000); // Delay for 3 seconds before redirect
+            }
+        }
+
+        // Initialize the chess board
+        createChessBoard();
     </script>
-  </body>
+
+</body>
 </html>
