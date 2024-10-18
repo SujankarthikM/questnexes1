@@ -1,4 +1,3 @@
-
 (function( $ ) {
 	$.fn.makeLock = function(dialNum){
 		console.clear()
