@@ -50,6 +50,3 @@
 }( jQuery ));
 
 $("#lock").makeLock()
-
-
-
