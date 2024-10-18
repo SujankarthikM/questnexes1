@@ -40,7 +40,7 @@
 			console.log(combo)
 			if(combo=='AAAAAA'){
 				console.log("got it")
-				window.location.href = 'congrats.html';
+				window.location.href = 'hanoi.html';
 
 			}
 
