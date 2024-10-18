@@ -77,7 +77,21 @@
       const queenContainer = document.getElementById("queen-container");
       const status = document.getElementById("status");
       const nextBtn = document.getElementById("nextBtn");
-
+      
+ document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+      // Disable common developer tools shortcuts
+      document.onkeydown = function (e) {
+        if (
+          e.key == "F12" ||
+          (e.ctrlKey && e.shiftKey && e.key == "I") || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.key == "J") || // Ctrl+Shift+J
+          (e.ctrlKey && e.key == "U") // Ctrl+U
+        ) {
+          return false;
+        }
+      };
       // Function to generate an 8x8 chessboard
       function createChessboard() {
         for (let i = 0; i < 64; i++) {
