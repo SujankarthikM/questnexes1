@@ -72,6 +72,20 @@
     <button id="nextBtn" disabled>Next</button>
 
     <script>
+        document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+
+      // Disable common developer tools shortcuts
+      document.onkeydown = function (e) {
+        if (
+          e.key == "F12" ||
+          (e.ctrlKey && e.shiftKey && e.key == "I") || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.key == "J") || // Ctrl+Shift+J
+          (e.ctrlKey && e.key == "U") // Ctrl+U
+        ) {
+          return false;
+        }
       const chessboard = document.getElementById("chessboard");
       const queenContainer = document.getElementById("queen-container");
       const status = document.getElementById("status");
