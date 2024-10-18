@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Checker</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        #sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(9, 60px);
+            grid-template-rows: repeat(9, 60px);
+            gap: 1px;
+            border: 2px solid #333;
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            text-align: center;
+            font-size: 24px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            outline: none;
+            transition: background-color 0.2s;
+        }
+        .cell:focus {
+            background-color: #d3d3d3;
+        }
+        .invalid {
+            background-color: #f99 !important;
+        }
+        .readonly {
+            background-color: #eee;
+            color: #555;
+            font-weight: bold;
+        }
+        .thick-border-top {
+            border-top: 3px solid #333;
+        }
+        .thick-border-left {
+            border-left: 3px solid #333;
+        }
+        #new-game, #next-page {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #new-game:hover, #next-page:hover {
+            background-color: #555;
+        }
+        #next-page {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sudoku-board"></div>
+    <button id="new-game">New Game</button>
+    <button id="next-page">Next</button>
+
+    <script>
+        const sudokuBoard = document.getElementById('sudoku-board');
+        const newGameButton = document.getElementById('new-game');
+        const nextPageButton = document.getElementById('next-page');
+
+        function generateRandomBoard() {
+            const board = Array.from({ length: 9 }, () => Array(9).fill(0));
+            for (let i = 0; i < 9; i++) {
+                const numbers = new Set();
+                while (numbers.size < 4) {
+                    const col = Math.floor(Math.random() * 9);
+                    const num = Math.floor(Math.random() * 9) + 1;
+                    if (isValidPlacement(i, col, num, board)) {
+                        board[i][col] = num;
+                        numbers.add(col);
+                    }
+                }
+            }
+            return board;
+        }
+
+        function createSudokuBoard() {
+            sudokuBoard.innerHTML = ''; // Clear the existing board
+            const board = generateRandomBoard();
+
+            board.forEach((row, rowIndex) => {
+                row.forEach((value, colIndex) => {
+                    const cell = document.createElement('input');
+                    cell.type = 'text';
+                    cell.classList.add('cell');
+                    cell.setAttribute('data-row', rowIndex);
+                    cell.setAttribute('data-col', colIndex);
+                    cell.maxLength = 1;
+
+                    // Add thick borders for 3x3 grids
+                    if (rowIndex % 3 === 0) cell.classList.add('thick-border-top');
+                    if (colIndex % 3 === 0) cell.classList.add('thick-border-left');
+
+                    if (value !== 0) {
+                        cell.value = value;
+                        cell.readOnly = true;
+                        cell.classList.add('readonly');
+                    } else {
+                        cell.addEventListener('input', validateInput);
+                    }
+
+                    cell.addEventListener('keydown', navigateWithArrows);
+                    sudokuBoard.appendChild(cell);
+                });
+            });
+        }
+
+        function validateInput(event) {
+            const cell = event.target;
+            const row = parseInt(cell.getAttribute('data-row'));
+            const col = parseInt(cell.getAttribute('data-col'));
+            const value = cell.value;
+
+            if (!/^[1-9]$/.test(value)) {
+                cell.value = '';
+                return;
+            }
+
+            cell.classList.remove('invalid');
+
+            if (!isValidPlacement(row, col, parseInt(value))) {
+                cell.classList.add('invalid');
+            }
+
+            checkIfSolved();
+        }
+
+        function isValidPlacement(row, col, value, board = null) {
+            board = board || getCurrentBoard();
+            for (let i = 0; i < 9; i++) {
+                if (i !== col && board[row][i] === value) return false;
+                if (i !== row && board[i][col] === value) return false;
+            }
+
+            const startRow = Math.floor(row / 3) * 3;
+            const startCol = Math.floor(col / 3) * 3;
+
+            for (let r = startRow; r < startRow + 3; r++) {
+                for (let c = startCol; c < startCol + 3; c++) {
+                    if ((r !== row || c !== col) && board[r][c] === value) return false;
+                }
+            }
+
+            return true;
+        }
+
+        function getCurrentBoard() {
+            const board = Array.from({ length: 9 }, () => Array(9).fill(0));
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                const row = parseInt(cell.getAttribute('data-row'));
+                const col = parseInt(cell.getAttribute('data-col'));
+                const value = parseInt(cell.value);
+                if (!isNaN(value)) {
+                    board[row][col] = value;
+                }
+            });
+            return board;
+        }
+
+        function navigateWithArrows(event) {
+            const key = event.key;
+            const cell = event.target;
+            const row = parseInt(cell.getAttribute('data-row'));
+            const col = parseInt(cell.getAttribute('data-col'));
+
+            let nextCell;
+            switch (key) {
+                case 'ArrowUp':
+                    nextCell = document.querySelector(`.cell[data-row='${row - 1}'][data-col='${col}']`);
+                    break;
+                case 'ArrowDown':
+                    nextCell = document.querySelector(`.cell[data-row='${row + 1}'][data-col='${col}']`);
+                    break;
+                case 'ArrowLeft':
+                    nextCell = document.querySelector(`.cell[data-row='${row}'][data-col='${col - 1}']`);
+                    break;
+                case 'ArrowRight':
+                    nextCell = document.querySelector(`.cell[data-row='${row}'][data-col='${col + 1}']`);
+                    break;
+            }
+
+            if (nextCell) {
+                nextCell.focus();
+                event.preventDefault();
+            }
+        }
+
+        function checkIfSolved() {
+            const board = getCurrentBoard();
+            const isSolved = board.every((row, rowIndex) =>
+                row.every((value, colIndex) =>
+                    value !== 0 && isValidPlacement(rowIndex, colIndex, value, board)
+                )
+            );
+
+            if (isSolved) {
+                nextPageButton.style.display = 'inline-block';
+            } else {
+                nextPageButton.style.display = 'none';
+            }
+        }
+
+        newGameButton.addEventListener('click', createSudokuBoard);
+
+        nextPageButton.addEventListener('click', () => {
+            // Redirect to the next page or perform any other action
+            window.location.href = 'hanoi.html'; // Replace with the actual URL or action
+        });
+
+        // Initialize the game
+        createSudokuBoard();
+    </script>
+</body>
+</html>

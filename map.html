@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clickable Image Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            margin-top: 50px;
+        }
+
+        .image-container {
+            margin-top: 20px;
+        }
+
+        img {
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Quest Nexus - Find the Right Spot</h1>
+    <p>Click on the right location(where you are right now) on the image to go to the next page!</p>
+
+    <div class="image-container">
+        <!-- The image with clickable areas -->
+        <img src="map.png" usemap="#image-map" alt="Mystery Image" width="900" height="500">
+        
+        <!-- Image map with clickable areas -->
+        <map name="image-map">
+            <!-- Coordinates for the clickable areas -->
+            <area shape="rect" coords="300,51,230,93" alt="Region 1" href="nextpage.html">
+        </map>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+
+body {
+    overflow-y: scroll;
+    background: #b7b7b7;
+}
+
+.myCenter {
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.mystery-quest-regular {
+    font-family: "Mystery Quest", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+.myLock {
+    display: block;
+    margin: 0 auto; /* Center both horizontally and vertically */
+    height: 150px;
+    padding: 20px 30px 20px 30px;
+    background: rgb(212, 211, 211);
+    /* linear-gradient(rgb(0, 0, 0), #DCD3CA) */
+    background: none;
+    border-radius: 20px;
+    /* box-shadow: inset 0 -4px 4px #B1AAA1, 0 15px 30px rgba(0, 0, 0, 0.5), 0 2px 5px 1px rgba(0, 0, 0, 0.7); */
+    position: relative; /* Necessary for vertical centering */
+    top: 50%; /* Position at the middle vertically */
+    transform: translateY(-50%); /* Adjust for centering */
+}
+
+/* Rest of the CSS remains the same */
+
+
+.myLock .lockInset {
+    display: inline-block;
+    position: relative;
+    padding: 18px;
+    background: linear-gradient(rgb(247, 209, 169), #f2a319);
+    border-radius: 12px;
+    box-shadow: inset 0 -6px 3px -3px #B1AAA1, 0 5px 8px rgba(0, 0, 0, 0.07), 0 10px 8px rgba(0, 0, 0, 0.07), 0 15px 8px rgba(0, 0, 0, 0.07), 0 20px 8px rgba(0, 0, 0, 0.07), 0 25px 8px rgba(0, 0, 0, 0.07), 0 2px 3px 1px rgba(0, 0, 0, 0.5);
+}
+
+.myLock .lockLine {
+    position: absolute;
+    margin: auto -18px;
+    width: 100%;
+    top: 0px;
+    bottom: 0px;
+    height: 3px;
+    background: linear-gradient(rgba(114, 113, 113, 0.2) 1px, transparent 1px, transparent 3px, rgba(94, 94, 94, 0.3) 3px);
+}
+
+.myLock .lockWrapper {
+    text-align: center;
+    position: relative;
+    background: rgba(0, 0, 0, 0.85);
+    background: linear-gradient(black 13%, #403C3A, black 75%, #110C14, black 85%);
+    border-radius: 6px;
+    height: 120px;
+    box-shadow: inset 0 0 8px 2px rgb(70, 69, 69);
+}
+
+.myLock .dial {
+    display: inline-block;
+    vertical-align: top;
+    height: 120px;
+    width: 67px;
+    padding-top: -40px;
+    margin: 0px 5px;
+    background: linear-gradient(#000000 0%, #000006 3%, #08000d 4%, #292527 7%, #55514c 9%, #847f76 11%, #979289 12%, #bab3a9 15%, #d9cfc6 17%, #f4eae1 19%, #fff4ec 20%, #fffffc 22%, #ffffff 24%, #fffffe 33%, #fffdf5 35%, #fef3eb 37%, #d4ccc2 45%, #ada69d 54%, #726d66 65%, #595550 71%, #4f4b47 74%, #4b4743 76%, #4b4743 79%, #4f4b47 80%, #6a665f 84%, #6d6861 85%, #6a665f 88%, #65605a 89%, #54504b 91%, #0d0711 98%, #02000a 99%, #000004 100%);
+    border: 4px solid rgba(0, 0, 0, 0.25);
+    border-top: none;
+    border-bottom: none;
+    
+    overflow: hidden;
+    font-size: 35px;
+    font-family: arial;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.5), 0 -2px 0 rgba(255, 255, 255, 0.1);
+    color: #827D74;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2), 0 6px 8px rgba(0, 0, 0, 0.2), 0 9px 8px rgba(0, 0, 0, 0.2);
+}
+
+.myLock .dial ol {
+    display: inline;
+    position: relative;
+    top: -40px;
+}
+
+.myLock .dial ol li {
+    display: inline-block;
+    position: relative;
+    font-weight: 600;
+    display: block;
+    margin: 0 auto;
+    height: 38px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.myLock .shadow {
+    pointer-events: none;
+    position: absolute;
+    top: 0px;
+    background: linear-gradient(black 5%, transparent 40%, transparent 60%, black 100%);
+    border-radius: 6px;
+    height: 120px;
+    width: 100%;
+}
+
+.myLock .btnEnter {
+    font-size: 35px;
+    font-family:"Mystery Quest", sans-serif;
+    font-weight: 600;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 -1px 0 rgba(0, 0, 0, 0.5), 0 -2px 0 rgba(255, 255, 255, 0.1);
+    color: #333;
+    cursor: pointer;
+    margin: auto;
+    width: 250px;
+    height: 40px;
+    margin-top: 50px;
+    display: block;
+    padding: 18px;
+    background: linear-gradient(white, #DCD3CA);
+    border-radius: 12px;
+    border: 1px solid #999;
+    box-shadow: inset 0 -6px 3px -3px #B1AAA1, 0 5px 8px rgba(0, 0, 0, 0.07), 0 10px 8px rgba(0, 0, 0, 0.07), 0 15px 8px rgba(0, 0, 0, 0.07), 0 20px 8px rgba(0, 0, 0, 0.07), 0 25px 8px rgba(0, 0, 0, 0.07), 0 2 }
+
+
+    

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Ranking with Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #ranking {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        .item {
+            cursor: pointer;
+            padding: 15px;
+            border: 1px solid #ccc;
+            margin: 5px;
+            border-radius: 5px;
+            transition: transform 0.3s ease, background-color 0.3s ease; /* Slowed down transition */
+            background-color: #4caf50;
+            color: white;
+            position: relative; /* For the positioning context */
+        }
+
+        .item:nth-child(odd) {
+            background-color: #2196F3; /* Light blue for odd items */
+        }
+
+        .item:hover {
+            background-color: #ff9800; /* Orange on hover */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .delta-up {
+            color: #cddc39; /* Light green */
+        }
+
+        .delta-down {
+            color: #f44336; /* Red */
+        }
+
+        .delta {
+            color: #ffffff; /* White for deltas */
+            font-weight: bold;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Rankings</h1>
+    <div id="ranking">
+        <div class="item" data-id="itemA" data-order="1" data-lastvalue="2">Item A: <span class="delta">2</span></div>
+        <div class="item" data-id="itemB" data-order="2" data-lastvalue="3">Item B: <span class="delta">3</span></div>
+        <div class="item" data-id="itemC" data-order="3" data-lastvalue="4">Item C: <span class="delta">4</span></div>
+        <div class="item" data-id="itemD" data-order="4" data-lastvalue="1">Item D: <span class="delta">1</span></div>
+    </div>
+
+    <script>
+        const dataset1 = [
+            {'key':'itemA', 'value': 2},
+            {'key':'itemB', 'value': 3},
+            {'key':'itemC', 'value': 4},
+            {'key':'itemD', 'value': 1}
+        ];
+
+        const dataset2 = [
+            {'key':'itemA', 'value': 50},
+            {'key':'itemB', 'value': 100},
+            {'key':'itemC', 'value': 500},
+            {'key':'itemD', 'value': 600}
+        ];
+
+        function updateRanking(dataset) {
+            dataset.sort((a, b) => b.value - a.value);
+            
+            const rankingContainer = document.getElementById('ranking');
+            rankingContainer.innerHTML = '';
+
+            dataset.forEach((item, idx) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'item';
+                itemDiv.setAttribute('data-id', item.key);
+                itemDiv.setAttribute('data-order', idx + 1);
+                itemDiv.setAttribute('data-lastvalue', item.value);
+                itemDiv.innerHTML = `${item.key}: <span class="delta">${item.value}</span>`;
+                rankingContainer.appendChild(itemDiv);
+            });
+
+            // Re-assign click event for reordering
+            assignClickEvents();
+        }
+
+        function assignClickEvents() {
+            const items = document.querySelectorAll('.item');
+            items.forEach(item => {
+                item.addEventListener('click', () => {
+                    const currentOrder = parseInt(item.getAttribute('data-order'));
+                    if (currentOrder > 1) { // Only swap if not already at the top
+                        const previousItem = document.querySelector(`[data-order="${currentOrder - 1}"]`);
+                        
+                        // Animate the swap
+                        const itemRect = item.getBoundingClientRect();
+                        const prevRect = previousItem.getBoundingClientRect();
+                        
+                        // Move the current item up
+                        item.style.transform = `translateY(-${prevRect.height + 10}px)`; // Move item up
+                        previousItem.style.transform = `translateY(${itemRect.height + 10}px)`; // Move previous item down
+
+                        // Wait for the animation to finish before swapping their attributes
+                        setTimeout(() => {
+                            // Swap the order
+                            item.setAttribute('data-order', currentOrder - 1);
+                            previousItem.setAttribute('data-order', currentOrder);
+
+                            // Reset the transform for both items
+                            item.style.transform = '';
+                            previousItem.style.transform = '';
+                            
+                            // Update the display order
+                            updateDisplayOrder();
+                        }, 300); // Match this timeout with the CSS transition duration
+
+                    }
+
+                    // Log new order
+                    console.log('New Order After Click:');
+                    items.forEach((item) => {
+                        console.log(`${item.getAttribute('data-id')} - Position: ${item.getAttribute('data-order')}`);
+                    });
+                });
+            });
+        }
+
+        function updateDisplayOrder() {
+            const rankingContainer = document.getElementById('ranking');
+            const itemsArray = Array.from(rankingContainer.children);
+            itemsArray.sort((a, b) => parseInt(a.getAttribute('data-order')) - parseInt(b.getAttribute('data-order')));
+            rankingContainer.innerHTML = ''; // Clear current display
+
+            itemsArray.forEach(item => rankingContainer.appendChild(item)); // Re-append in new order
+        }
+
+        // Initial ranking display
+        updateRanking(dataset1);
+    </script>
+</body>
+</html>

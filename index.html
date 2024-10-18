@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find the Difference Puzzle</title>
+    <style>
+      .header {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+      .header h1 {
+        font-size: 48px;
+        margin: 0 5px;
+      }
+      .header h2 {
+        font-size: 24px;
+        margin: 0 5px;
+      }
+      .header span {
+        font-size: 36px;
+      }
+      .puzzle-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+      }
+      .puzzle-container img {
+        width: 500px;
+        height: auto;
+        margin: 0 10px;
+      }
+      a {
+        color: black;
+        text-decoration: none;
+        padding: 5px;
+      }
+      .hint {
+        display: none;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 18px;
+        color: red;
+      }
+    </style>
+  </head>
+  <body oncontextmenu="return false;">
+    <div class="header">
+      <h2><span>FiNd</span></h2>
+      <h1>ThE</h1>
+      dIfFeReNcE, yOuR wAy
+      <h2>
+        LiEs On ThE
+        <a href="digi_logic.html" id="difference-link">DiFFeRenCe</a> yoU fiNd.
+      </h2>
+    </div>
+
+    <div class="puzzle-container">
+      <img src="images/puzzle.jpg" alt="Puzzle Image 1" />
+      <img src="images/puzzle.jpg" alt="Puzzle Image 2" />
+    </div>
+
+    <div class="hint" id="hint">
+      Hint: Look for the "DiFFeRenCe" to find your next path!
+    </div>
+
+    <script>
+      let linkClicked = false;
+
+      document
+        .getElementById("difference-link")
+        .addEventListener("click", function () {
+          linkClicked = true;
+        });
+
+      setTimeout(function () {
+        if (!linkClicked) {
+          document.getElementById("hint").style.display = "block";
+        }
+      }, 30000); // 30 seconds = 30000 milliseconds
+
+      // Disable F12 and other inspection-related shortcuts
+      document.onkeydown = function (e) {
+        if (e.key == "F12" || (e.ctrlKey && e.shiftKey && e.key == "I") || (e.ctrlKey && e.key == "U")) {
+          return false;
+        }
+      };
+    </script>
+  </body>
+</html>
