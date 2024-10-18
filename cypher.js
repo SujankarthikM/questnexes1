@@ -1,3 +1,19 @@
+ document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
+
+      // Disable common developer tools shortcuts
+      document.onkeydown = function (e) {
+        if (
+          e.key == "F12" ||
+          (e.ctrlKey && e.shiftKey && e.key == "I") || // Ctrl+Shift+I
+          (e.ctrlKey && e.shiftKey && e.key == "J") || // Ctrl+Shift+J
+          (e.ctrlKey && e.key == "U") // Ctrl+U
+        ) {
+          return false;
+        }
+      };
+
 (function( $ ) {
 	$.fn.makeLock = function(dialNum){
 		console.clear()
