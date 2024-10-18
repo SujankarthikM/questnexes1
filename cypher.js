@@ -1,3 +1,4 @@
+
 (function( $ ) {
 	$.fn.makeLock = function(dialNum){
 		console.clear()
@@ -18,7 +19,7 @@
 		for(var i = 0; i< dials; i++){
 			var dial = $( '<div class="dial"><ol></ol></div>').appendTo(lockWrapper)
 			var slider = dial.find('ol')
-			for(var n = 0; n < 4; n++){
+			for(var n = 0; n < 26; n++){
 				slider.append('<li>'+letters[n]+'</li>')
 			}
 			slider.prepend( slider.find('li:last-child') )
@@ -38,7 +39,7 @@
                 
 			})
 			console.log(combo)
-			if(combo=='AAAAAA'){
+			if(combo=='PEQWS'){
 				console.log("got it")
 				window.location.href = 'hanoi.html';
 
